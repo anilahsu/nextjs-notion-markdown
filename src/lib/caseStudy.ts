@@ -1,6 +1,6 @@
 import { QueryDatabaseResponse } from "@notionhq/client/build/src/api-endpoints";
-import { DatabaseItem, IPost } from "./postsType";
-import { notion } from "./constant";
+import { DatabaseItem, IPost } from "./caseStudyType";
+import { notion } from "./notion";
 
 export const extractPosts = async (
   response: QueryDatabaseResponse
@@ -27,7 +27,7 @@ export const extractPosts = async (
       const moneyName = postInDB.properties.MoneyName
         ? postInDB.properties.MoneyName.rich_text[0].plain_text
         : "";
-        const path = postInDB.properties.Path
+      const path = postInDB.properties.Path
         ? postInDB.properties.Path.rich_text[0].plain_text
         : "";
       const cover =
