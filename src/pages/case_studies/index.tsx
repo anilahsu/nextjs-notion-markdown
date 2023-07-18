@@ -2,7 +2,7 @@ import { GetStaticProps } from "next";
 import { IPost } from "@/lib/caseStudyType";
 import { getPosts } from "@/lib/caseStudy";
 import Link from "next/link";
-import styles from "@/styles/Home.module.css";
+import styled from '@emotion/styled'
 
 export const getStaticProps: GetStaticProps = async () => {
   const posts = await getPosts();
@@ -23,14 +23,14 @@ const CaseStudyList = ({ posts }: Props) => {
       {posts.map((post) => {
         return (
           <Link key={post.path} href={"/case_studies/" + post.path}>
-            <div className={styles.postCard}>
+            <Card>
               <p>{post.id}</p>
-              <p>{post.title}</p>
-              <p>
+              <h2>{post.title}</h2>
+              <span>
                 {post.tags.map((tag, index) => (
                   <span key={index}>{tag}</span>
                 ))}
-              </p>
+              </span>
               <p>{post.modifiedDate}</p>
               <p>{post.refLink}</p>
               <p>{post.companyName}</p>
@@ -38,7 +38,7 @@ const CaseStudyList = ({ posts }: Props) => {
               <p>{post.path}</p>
               <p>{post.industryCategory}</p>
               <p>{post.url}</p>
-            </div>
+            </Card>
           </Link>
         );
       })}
@@ -47,3 +47,10 @@ const CaseStudyList = ({ posts }: Props) => {
 };
 
 export default CaseStudyList;
+
+const Card = styled.div`
+  padding: 20px;
+  border: 1px solid #2d2d2d;
+  margin: 10px;
+  border-radius: 20px;
+`
