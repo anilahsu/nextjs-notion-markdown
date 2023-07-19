@@ -21,13 +21,29 @@ type Params = {
   };
 };
 
+function addZeroWidthSpace(text: string) {
+  const punctuationRegex =
+    /[“”「」『』【】〖〗〈〉《》）)。，]/g;
+  const boldItalicRegex = /(\*\*|__|\*|_)(.*?)\1/g;
+
+  const replacedText = text.replace(boldItalicRegex, (_, marker, content) => {
+
+    const updatedContent = content.replaceAll(
+      punctuationRegex,
+      (match: string) => "\u200B" + match + "\u200B"
+    );
+    return `${marker}${updatedContent}${marker}`;
+  });
+  return replacedText;
+}
+
 export const getStaticProps = async ({ params: { slug } }: Params) => {
   const { id } = CaseStudyPosts[slug];
   const mdblocks = await n2m.pageToMarkdown(id);
-  console.log(mdblocks);
-  const mdString = n2m.toMarkdownString(mdblocks);
-  const markdown = mdString.parent;
 
+  const mdString = n2m.toMarkdownString(mdblocks);
+  const markdown = addZeroWidthSpace(mdString.parent);
+  console.log("markdown", markdown);
   return {
     props: {
       mdString,
@@ -41,17 +57,8 @@ const NotionDomainDynamicPage = (props: {
   mdString: MdStringObject;
   markdown: string;
 }) => {
-  if (props.mdString) {
-    console.log(props.mdString);
-    console.log(Object.values(props.mdString));
-  }
   return (
-    <ReactMarkdown
-      remarkPlugins={[]}
-      components={{
-
-      }}
-    >
+    <ReactMarkdown remarkPlugins={[]} components={{}}>
       {props.markdown}
     </ReactMarkdown>
   );
