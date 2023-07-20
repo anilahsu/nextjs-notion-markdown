@@ -7,6 +7,7 @@ import Image from "next/image";
 import sizeOf from "image-size";
 import url from "url";
 import https from "https";
+import styles from "@/styles/post.module.css";
 
 
 export async function getStaticPaths() {
@@ -53,6 +54,7 @@ const NotionDomainDynamicPage = ({ markdown, imageSizes }: Props) => {
   return (
       <ReactMarkdown
       remarkPlugins={[]}
+      className={styles.reactMarkDown}
       components={{
         img: (props) => {
           if (props.src && imageSizes[props.src]) {
