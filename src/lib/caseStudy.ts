@@ -55,7 +55,7 @@ export const extractPosts = async (
   return posts;
 };
 
-export async function getPosts(): Promise<IPost[]> {
+export async function getCaseStudyPosts(): Promise<IPost[]> {
   const databaseId = process.env.NOTION_CASE_STUDIES_DATABASE_ID || "";
   const response: QueryDatabaseResponse = await notion.databases.query({
     database_id: databaseId,

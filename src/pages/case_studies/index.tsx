@@ -1,12 +1,12 @@
 import { GetStaticProps } from "next";
 import { IPost } from "@/lib/caseStudyType";
-import { getPosts } from "@/lib/caseStudy";
+import { getCaseStudyPosts } from "@/lib/caseStudy";
 import Link from "next/link";
 import styled from "@emotion/styled";
 import Image from "next/image";
 
 export const getStaticProps: GetStaticProps = async () => {
-  const posts = await getPosts();
+  const posts = await getCaseStudyPosts();
   return {
     props: {
       posts,
