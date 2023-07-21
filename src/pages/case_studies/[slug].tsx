@@ -1,4 +1,4 @@
-import { getPosts } from "@/lib/caseStudy";
+import { getCaseStudyPosts } from "@/lib/caseStudy";
 import { MdStringObject } from "notion-to-md/build/types";
 import { NotionToMarkdown } from "notion-to-md";
 import { CaseStudyPosts, notion } from "@/lib/notion";
@@ -8,14 +8,26 @@ import sizeOf from "image-size";
 import url from "url";
 import https from "https";
 import styles from "@/styles/post.module.css";
-
+import { isDev } from "@/lib/config";
 
 export async function getStaticPaths() {
-  return {
-    paths: [],
-    fallback: true,
+  if (isDev) {
+    return {
+      paths: [],
+      fallback: true,
+    };
+  }
+  const staticPaths = {
+    path: Object.keys(CaseStudyPosts).map((slug) => ({
+      params: {
+        slug,
+      },
+    })),
+    fallback: "blocking",
   };
+  return staticPaths;
 }
+
 const n2m = new NotionToMarkdown({ notionClient: notion });
 
 type Params = {
@@ -32,7 +44,6 @@ export const getStaticProps = async ({ params: { slug } }: Params) => {
 
   const newMarkdown = addZeroWidthSpace(markdown);
   const imageSizes = await getImageDimensions(markdown);
-  console.log("imageSizes", imageSizes);
   return {
     props: {
       mdString,
@@ -49,10 +60,9 @@ type Props = {
   imageSizes: Record<string, { width: number; height: number }>;
 };
 
-
 const NotionDomainDynamicPage = ({ markdown, imageSizes }: Props) => {
   return (
-      <ReactMarkdown
+    <ReactMarkdown
       remarkPlugins={[]}
       className={styles.reactMarkDown}
       components={{
@@ -61,9 +71,13 @@ const NotionDomainDynamicPage = ({ markdown, imageSizes }: Props) => {
             if (!props.src.startsWith("data:")) {
               const { src, alt } = props;
               const { width, height } = imageSizes[props.src];
-              console.log(src, alt, width, height);
               return (
-                <Image src={src} alt={alt || ""} width={width} height={height} />
+                <Image
+                  src={src}
+                  alt={alt || ""}
+                  width={width}
+                  height={height}
+                />
               );
             }
           } else {
@@ -74,7 +88,6 @@ const NotionDomainDynamicPage = ({ markdown, imageSizes }: Props) => {
     >
       {markdown}
     </ReactMarkdown>
-
   );
 };
 
