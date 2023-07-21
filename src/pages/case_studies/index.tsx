@@ -7,6 +7,12 @@ import Image from "next/image";
 
 export const getStaticProps: GetStaticProps = async () => {
   const posts = await getCaseStudyPosts();
+  posts
+    .sort(
+      (a, b) =>
+        new Date(a.modifiedDate).getTime() - new Date(b.modifiedDate).getTime()
+    )
+    .reverse();
   return {
     props: {
       posts,
@@ -64,7 +70,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-`
+`;
 const Card = styled.div`
   padding: 20px;
   border: 1px solid #2d2d2d;

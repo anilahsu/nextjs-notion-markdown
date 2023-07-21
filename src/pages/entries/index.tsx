@@ -7,6 +7,12 @@ import Image from "next/image";
 
 export const getStaticProps: GetStaticProps = async () => {
   const posts = await getEntryPosts();
+  posts
+    .sort(
+      (a, b) =>
+        new Date(a.modifiedDate).getTime() - new Date(b.modifiedDate).getTime()
+    )
+    .reverse();
   return {
     props: {
       posts,
@@ -35,11 +41,11 @@ const EntryList = ({ posts }: Props) => {
                 />
               )}
               <Title>{post.title}</Title>
-              <p>{post.description}</p>
+              <Description>{post.description}</Description>
               <p>{post.modifiedDate}</p>
-              <p>{post.url}</p>
               <p>{post.path}</p>
               <p>{post.id}</p>
+              <p>{post.url}</p>
 
               <span>
                 {post.tags.map((tag, index) => (
@@ -79,8 +85,14 @@ const CoverImage = styled(Image)`
   width: 100%;
   height: auto;
 `;
+
 const Title = styled.h2`
   font-size: 20px;
   line-height: 30px;
   text-align: center;
 `;
+
+const Description = styled.h5`
+  font-size: 16px;
+  text-align: center;
+`
