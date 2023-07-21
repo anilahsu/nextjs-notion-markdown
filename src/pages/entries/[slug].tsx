@@ -74,7 +74,7 @@ type Props = {
 
 const NotionDomainDynamicPage = ({ property, markdown, imageSizes }: Props) => {
   return (
-    <div>
+    <div className={styles.container}>
       <h1>{property && property.title}</h1>
       <p>{property && property.companyName}</p>
       <ReactMarkdown
