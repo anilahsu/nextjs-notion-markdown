@@ -1,7 +1,7 @@
 import { getCaseStudyPosts } from "@/lib/caseStudy";
 import { MdStringObject } from "notion-to-md/build/types";
 import { NotionToMarkdown } from "notion-to-md";
-import { CaseStudyPosts, notion } from "@/lib/notion";
+import { notion } from "@/lib/notion";
 import ReactMarkdown from "react-markdown";
 import Image from "next/image";
 import sizeOf from "image-size";
@@ -9,8 +9,14 @@ import url from "url";
 import https from "https";
 import styles from "@/styles/post.module.css";
 import { isDev } from "@/lib/config";
+import { IPost } from "@/lib/caseStudyType";
 
 export async function getStaticPaths() {
+  const allPosts = await getCaseStudyPosts();
+  const allPaths = allPosts.map((post) => {
+    return post.path;
+  });
+
   if (isDev) {
     return {
       paths: [],
@@ -18,7 +24,7 @@ export async function getStaticPaths() {
     };
   }
   const staticPaths = {
-    path: Object.keys(CaseStudyPosts).map((slug) => ({
+    path: allPaths.map((slug) => ({
       params: {
         slug,
       },
@@ -32,12 +38,19 @@ const n2m = new NotionToMarkdown({ notionClient: notion });
 
 type Params = {
   params: {
-    slug: keyof typeof CaseStudyPosts;
+    slug: string;
   };
 };
 
 export const getStaticProps = async ({ params: { slug } }: Params) => {
-  const { id } = CaseStudyPosts[slug];
+  const allPosts = await getCaseStudyPosts();
+  const currentPost = allPosts.filter((post) => {
+    return post.path === slug;
+  });
+  console.log("currentPost", currentPost);
+
+  const property = currentPost[0];
+  const id = property.id;
   const mdblocks = await n2m.pageToMarkdown(id);
   const mdString = n2m.toMarkdownString(mdblocks);
   const markdown = mdString.parent;
@@ -47,6 +60,7 @@ export const getStaticProps = async ({ params: { slug } }: Params) => {
   return {
     props: {
       mdString,
+      property,
       markdown: newMarkdown,
       imageSizes,
     },
@@ -56,38 +70,43 @@ export const getStaticProps = async ({ params: { slug } }: Params) => {
 
 type Props = {
   mdString: MdStringObject;
+  property: IPost;
   markdown: string;
   imageSizes: Record<string, { width: number; height: number }>;
 };
 
-const NotionDomainDynamicPage = ({ markdown, imageSizes }: Props) => {
+const NotionDomainDynamicPage = ({ property, markdown, imageSizes }: Props) => {
   return (
-    <ReactMarkdown
-      remarkPlugins={[]}
-      className={styles.reactMarkDown}
-      components={{
-        img: (props) => {
-          if (props.src && imageSizes[props.src]) {
-            if (!props.src.startsWith("data:")) {
-              const { src, alt } = props;
-              const { width, height } = imageSizes[props.src];
-              return (
-                <Image
-                  src={src}
-                  alt={alt || ""}
-                  width={width}
-                  height={height}
-                />
-              );
+    <div>
+      <h1>{property && property.title}</h1>
+      <p>{property && property.companyName}</p>
+      <ReactMarkdown
+        remarkPlugins={[]}
+        className={styles.reactMarkDown}
+        components={{
+          img: (props) => {
+            if (props.src && imageSizes[props.src]) {
+              if (!props.src.startsWith("data:")) {
+                const { src, alt } = props;
+                const { width, height } = imageSizes[props.src];
+                return (
+                  <Image
+                    src={src}
+                    alt={alt || ""}
+                    width={width}
+                    height={height}
+                  />
+                );
+              }
+            } else {
+              return <img {...props} />;
             }
-          } else {
-            return <img {...props} />;
-          }
-        },
-      }}
-    >
-      {markdown}
-    </ReactMarkdown>
+          },
+        }}
+      >
+        {markdown}
+      </ReactMarkdown>
+    </div>
   );
 };
 
