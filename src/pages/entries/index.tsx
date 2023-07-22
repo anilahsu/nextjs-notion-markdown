@@ -25,9 +25,9 @@ interface Props {
 }
 
 const EntryList = ({ posts }: Props) => {
-  console.log(posts)
   return (
     <Container>
+      <h1>Entry Post</h1>
       {posts.map((post) => {
         return (
           <Link key={post.path} href={"/entries/" + post.path}>
@@ -42,14 +42,14 @@ const EntryList = ({ posts }: Props) => {
               )}
               <Title>{post.title}</Title>
               <Description>{post.description}</Description>
-              <p>{post.modifiedDate}</p>
+              {/* <p>{post.modifiedDate}</p>
               <p>{post.path}</p>
               <p>{post.id}</p>
-              <p>{post.url}</p>
+              <p>{post.url}</p> */}
 
               <span>
-                {post.tags.map((tag, index) => (
-                  <span key={index}>{tag}</span>
+                {post.categories.map((category, index) => (
+                  <Category key={index}>{category}</Category>
                 ))}
               </span>
             </Card>
@@ -63,6 +63,7 @@ const EntryList = ({ posts }: Props) => {
 export default EntryList;
 
 const Container = styled.div`
+  padding: 20px 0;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -79,6 +80,7 @@ const Card = styled.div`
   width: 100%;
   flex-direction: column;
   align-items: center;
+  gap: 10px;
 `;
 
 const CoverImage = styled(Image)`
@@ -87,12 +89,19 @@ const CoverImage = styled(Image)`
 `;
 
 const Title = styled.h2`
-  font-size: 20px;
+  font-size: 24px;
   line-height: 30px;
   text-align: center;
 `;
 
 const Description = styled.h5`
-  font-size: 16px;
+  font-size: 20px;
   text-align: center;
+`
+
+const Category = styled.span`
+ padding: 6px;
+ background: #dedede;
+ border-radius: 10px;
+ margin: 0 5px;
 `

@@ -28,7 +28,7 @@ export interface IPost {
   id: string;
   title: string;
   description: string;
-  tags: string[];
+  categories: string[];
   createdTime: string;
   modifiedDate: string;
   path: string;
@@ -42,7 +42,7 @@ export type DatabaseItem = PostResultProperties & {
   properties: {
     Title: PropertyValueTitle;
     Description: PropertyValueRichText;
-    Tags: PropertyValueMultiSelect;
+    Categories: PropertyValueMultiSelect;
     CreatedTime: PropertyValueCreatedTime;
     LastEditedTime: PropertyValueEditedTime;
     Path: PropertyValueRichText;
