@@ -9,7 +9,7 @@ import url from "url";
 import https from "https";
 import styles from "@/styles/post.module.css";
 import { isDev } from "@/lib/config";
-import { IPost } from "@/lib/caseStudyType";
+import { IPost } from "@/lib/entryType";
 
 export async function getStaticPaths() {
   const allPosts = await getEntryPosts();
@@ -76,7 +76,7 @@ const NotionDomainDynamicPage = ({ property, markdown, imageSizes }: Props) => {
   return (
     <div className={styles.container}>
       <h1>{property && property.title}</h1>
-      <p>{property && property.companyName}</p>
+      <p>{property && property.categories}</p>
       <ReactMarkdown
         remarkPlugins={[]}
         className={styles.reactMarkDown}
