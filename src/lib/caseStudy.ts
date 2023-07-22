@@ -10,24 +10,29 @@ export const extractPosts = async (
   );
   const posts: IPost[] = await Promise.all(
     databaseItems.map(async (postInDB: DatabaseItem) => {
-      const title = postInDB.properties.Title.title[0].plain_text;
-      const tags = postInDB.properties.Tags.multi_select;
+      const title = postInDB.properties.Title.title[0]
+        ? postInDB.properties.Title.title[0].plain_text
+        : "";
+      const industry = postInDB.properties.Industry.multi_select;
+      const area = postInDB.properties.Area.multi_select;
+      const topic = postInDB.properties.Topic.multi_select;
+      const scale = postInDB.properties.Scale.multi_select;
       const refLink = postInDB.properties.RefLink
         ? postInDB.properties.RefLink.url
         : null;
       const lastEditedTime = postInDB.properties.LastEditedTime
         ? postInDB.properties.LastEditedTime.last_edited_time
         : "";
-      const companyName = postInDB.properties.CompanyName
+      const companyName = postInDB.properties.CompanyName.rich_text[0]
         ? postInDB.properties.CompanyName.rich_text[0].plain_text
         : "";
-      const industryCategory = postInDB.properties.IndustryCategory
+      const industryCategory = postInDB.properties.IndustryCategory.rich_text[0]
         ? postInDB.properties.IndustryCategory.rich_text[0].plain_text
         : "";
-      const moneyName = postInDB.properties.MoneyName
+      const moneyName = postInDB.properties.MoneyName.rich_text[0]
         ? postInDB.properties.MoneyName.rich_text[0].plain_text
         : "";
-      const path = postInDB.properties.Path
+      const path = postInDB.properties.Path.rich_text[0]
         ? postInDB.properties.Path.rich_text[0].plain_text
         : "";
       const cover =
@@ -39,7 +44,10 @@ export const extractPosts = async (
       const post: IPost = {
         id: postInDB.id,
         title: title,
-        tags: tags.map((item) => item.name),
+        industry: industry.map((item) => item.name),
+        area: area.map((item) => item.name),
+        topic: topic.map((item) => item.name),
+        scale: scale.map((item) => item.name),
         refLink: refLink,
         modifiedDate: lastEditedTime,
         companyName: companyName,

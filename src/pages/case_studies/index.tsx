@@ -27,6 +27,7 @@ interface Props {
 const CaseStudyList = ({ posts }: Props) => {
   return (
     <Container>
+      <h1>Case Study Post</h1>
       {posts.map((post) => {
         return (
           <Link key={post.path} href={"/case_studies/" + post.path}>
@@ -43,16 +44,25 @@ const CaseStudyList = ({ posts }: Props) => {
               <p>{post.companyName}</p>
               <p>{post.moneyName}</p>
               <p>{post.industryCategory}</p>
-              <p>{post.refLink}</p>
+              {/* <p>{post.refLink}</p>
+              <p>{post.modifiedDate}</p>
 
               <p>{post.url}</p>
-              <p>{post.modifiedDate}</p>
               <p>{post.path}</p>
-              <p>{post.id}</p>
+              <p>{post.id}</p> */}
 
               <span>
-                {post.tags.map((tag, index) => (
-                  <span key={index}>{tag}</span>
+                {post.industry.map((tag, index) => (
+                  <Tag key={index}>{tag}</Tag>
+                ))}
+                {post.area.map((tag, index) => (
+                  <Tag key={index}>{tag}</Tag>
+                ))}
+                {post.topic.map((tag, index) => (
+                  <Tag key={index}>{tag}</Tag>
+                ))}
+                {post.scale.map((tag, index) => (
+                  <Tag key={index}>{tag}</Tag>
                 ))}
               </span>
             </Card>
@@ -66,9 +76,11 @@ const CaseStudyList = ({ posts }: Props) => {
 export default CaseStudyList;
 
 const Container = styled.div`
+  padding: 20px 0;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  gap: 10px;
   align-items: center;
 `;
 const Card = styled.div`
@@ -82,6 +94,7 @@ const Card = styled.div`
   width: 100%;
   flex-direction: column;
   align-items: center;
+  gap: 10px;
 `;
 
 const CoverImage = styled(Image)`
@@ -89,7 +102,14 @@ const CoverImage = styled(Image)`
   height: auto;
 `;
 const Title = styled.h2`
-  font-size: 20px;
+  font-size: 24px;
   line-height: 30px;
   text-align: center;
+`;
+
+const Tag = styled.span`
+  padding: 6px;
+  background: #dedede;
+  border-radius: 10px;
+  margin: 0 5px;
 `;

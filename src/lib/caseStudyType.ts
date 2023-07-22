@@ -14,7 +14,6 @@ type ExtractedPropertyValue<TType extends PropertyValueType> = Extract<
   PropertyValue,
   { type: TType }
 >;
-
 export type PropertyValueTitle = ExtractedPropertyValue<"title">;
 export type PropertyValueRichText = ExtractedPropertyValue<"rich_text">;
 export type PropertyValueMultiSelect = ExtractedPropertyValue<"multi_select">;
@@ -27,7 +26,10 @@ export type PropertyValueCreatedTime = ExtractedPropertyValue<"created_time">;
 export interface IPost {
   id: string;
   title: string;
-  tags: string[];
+  industry: string[];
+  area: string[];
+  topic: string[];
+  scale: string[];
   refLink: string | null;
   modifiedDate: string;
   companyName: string;
@@ -43,7 +45,10 @@ export type DatabaseItem = PostResultProperties & {
   url: string;
   properties: {
     Title: PropertyValueTitle;
-    Tags: PropertyValueMultiSelect;
+    Industry: PropertyValueMultiSelect;
+    Area: PropertyValueMultiSelect;
+    Topic: PropertyValueMultiSelect;
+    Scale: PropertyValueMultiSelect;
     RefLink: PropertyValueUrl;
     LastEditedTime: PropertyValueEditedTime;
     CompanyName: PropertyValueRichText;
