@@ -24,13 +24,14 @@ export async function getStaticPaths() {
     };
   }
   const staticPaths = {
-    path: allPaths.map((slug) => ({
+    paths: allPaths.map((slug) => ({
       params: {
         slug,
       },
     })),
     fallback: "blocking",
   };
+  console.log("staticPaths", staticPaths)
   return staticPaths;
 }
 
