@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { Inter } from "next/font/google";
-
-
+import styled from "@emotion/styled";
+import Link from "next/link";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,9 +14,21 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={`${inter.className}`}>
-        <h1>Home</h1>
-      </main>
+      <Main className={`${inter.className}`}>
+        <Title>Home</Title>
+        <Link href="/case_studies"><strong>Read Case Study Posts</strong></Link>
+        <br />
+        <Link href="/entries"><strong>Read Entry Posts</strong></Link>
+      </Main>
     </>
   );
 }
+
+const Main = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+const Title = styled.h1`
+  margin-bottom: 20px;
+`;
