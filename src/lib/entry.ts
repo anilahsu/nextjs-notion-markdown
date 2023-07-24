@@ -29,6 +29,8 @@ export const extractPosts = async (
           ? postInDB.cover.external.url
           : null;
       const url = postInDB.url;
+      const published = postInDB.properties.PublishedProduction.checkbox;
+      const priority = postInDB.properties.Priority.number;
 
       const post: IPost = {
         id: postInDB.id,
@@ -40,6 +42,8 @@ export const extractPosts = async (
         path: path,
         cover: cover,
         url: url,
+        published: published,
+        priority: priority,
       };
       return post;
     })
