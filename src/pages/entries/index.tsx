@@ -7,7 +7,8 @@ import Image from "next/image";
 
 export const getStaticProps: GetStaticProps = async () => {
   const posts = await getEntryPosts();
-  posts
+  const publishedPosts = posts
+    .filter((post) => post.published)
     .sort(
       (a, b) =>
         new Date(a.modifiedDate).getTime() - new Date(b.modifiedDate).getTime()
@@ -15,7 +16,7 @@ export const getStaticProps: GetStaticProps = async () => {
     .reverse();
   return {
     props: {
-      posts,
+      posts: publishedPosts,
     },
   };
 };
