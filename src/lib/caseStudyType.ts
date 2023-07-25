@@ -34,6 +34,7 @@ export interface IPost {
   scale: string[];
   refLink: string | null;
   modifiedDate: string;
+  createdTime: string;
   companyName: string;
   industryCategory: string;
   moneyName: string;
@@ -55,6 +56,7 @@ export type DatabaseItem = PostResultProperties & {
     Scale: PropertyValueMultiSelect;
     RefLink: PropertyValueUrl;
     LastEditedTime: PropertyValueEditedTime;
+    CreatedTime: PropertyValueCreatedTime;
     CompanyName: PropertyValueRichText;
     IndustryCategory: PropertyValueRichText;
     MoneyName: PropertyValueRichText;

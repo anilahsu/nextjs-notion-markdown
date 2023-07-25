@@ -20,6 +20,9 @@ export const extractPosts = async (
       const refLink = postInDB.properties.RefLink
         ? postInDB.properties.RefLink.url
         : null;
+      const createdTime = postInDB.properties.CreatedTime
+        ? postInDB.properties.CreatedTime.created_time
+        : "";
       const lastEditedTime = postInDB.properties.LastEditedTime
         ? postInDB.properties.LastEditedTime.last_edited_time
         : "";
@@ -45,21 +48,22 @@ export const extractPosts = async (
 
       const post: IPost = {
         id: postInDB.id,
-        title: title,
+        title,
         industry: industry.map((item) => item.name),
         area: area.map((item) => item.name),
         topic: topic.map((item) => item.name),
         scale: scale.map((item) => item.name),
-        refLink: refLink,
+        refLink,
+        createdTime,
         modifiedDate: lastEditedTime,
-        companyName: companyName,
-        industryCategory: industryCategory,
-        moneyName: moneyName,
-        path: path,
-        cover: cover,
-        url: url,
-        published: published,
-        priority: priority,
+        companyName,
+        industryCategory,
+        moneyName,
+        path,
+        cover,
+        url,
+        published,
+        priority,
       };
       return post;
     })
