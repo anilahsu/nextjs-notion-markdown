@@ -34,16 +34,16 @@ export const extractPosts = async (
 
       const post: IPost = {
         id: postInDB.id,
-        title: title,
+        title,
         categories: categories.map((item) => item.name),
         modifiedDate: lastEditedTime,
-        createdTime: createdTime,
-        description: description,
-        path: path,
-        cover: cover,
-        url: url,
-        published: published,
-        priority: priority,
+        createdTime,
+        description,
+        path,
+        cover,
+        url,
+        published,
+        priority,
       };
       return post;
     })
