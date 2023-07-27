@@ -31,7 +31,6 @@ export async function getStaticPaths() {
     })),
     fallback: "blocking",
   };
-  console.log("staticPaths", staticPaths)
   return staticPaths;
 }
 
