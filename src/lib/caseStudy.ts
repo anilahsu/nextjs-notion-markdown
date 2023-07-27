@@ -45,7 +45,13 @@ export const extractPosts = async (
       const url = postInDB.url;
       const published = postInDB.properties.PublishedProduction.checkbox;
       const priority = postInDB.properties.Priority.number;
-
+      const metaTitle = postInDB.properties.MoneyName.rich_text[0]
+      ? postInDB.properties.MoneyName.rich_text[0].plain_text
+      : "";
+      const metaDescription = postInDB.properties.MoneyName.rich_text[0]
+      ? postInDB.properties.MoneyName.rich_text[0].plain_text
+      : "";
+      
       const post: IPost = {
         id: postInDB.id,
         title,
@@ -64,6 +70,8 @@ export const extractPosts = async (
         url,
         published,
         priority,
+        metaTitle,
+        metaDescription,
       };
       return post;
     })

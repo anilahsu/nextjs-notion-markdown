@@ -43,6 +43,8 @@ export interface IPost {
   url: string;
   published: boolean;
   priority: number | null;
+  metaTitle: string;
+  metaDescription: string;
 }
 
 export type DatabaseItem = PostResultProperties & {
@@ -63,5 +65,7 @@ export type DatabaseItem = PostResultProperties & {
     Path: PropertyValueRichText;
     PublishedProduction: PropertyValueCheckbox;
     Priority: PropertyValueNumber;
+    MetaTitle: PropertyValueRichText;
+    MetaDescription: PropertyValueRichText;
   };
 };
