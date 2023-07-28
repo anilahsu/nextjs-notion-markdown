@@ -51,6 +51,7 @@ export const extractPosts = async (
       const metaDescription = postInDB.properties.MoneyName.rich_text[0]
       ? postInDB.properties.MoneyName.rich_text[0].plain_text
       : "";
+      const images = postInDB.properties.Images.files
 
       const post: IPost = {
         id: postInDB.id,
@@ -72,6 +73,7 @@ export const extractPosts = async (
         priority,
         metaTitle,
         metaDescription,
+        images,
       };
       return post;
     })

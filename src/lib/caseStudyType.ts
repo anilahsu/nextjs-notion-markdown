@@ -24,6 +24,7 @@ export type PropertyValueEditedTime =
 export type PropertyValueCreatedTime = ExtractedPropertyValue<"created_time">;
 export type PropertyValueCheckbox = ExtractedPropertyValue<"checkbox">;
 export type PropertyValueNumber = ExtractedPropertyValue<"number">;
+export type PropertyValueFiles = ExtractedPropertyValue<"files">;
 
 export interface IPost {
   id: string;
@@ -45,6 +46,20 @@ export interface IPost {
   priority: number | null;
   metaTitle: string;
   metaDescription: string;
+  images: ({
+    file: {
+        url: string;
+        expiry_time: string;
+    };
+    name: string;
+    type?: "file" | undefined;
+} | {
+    external: {
+        url: string;
+    };
+    name: string;
+    type?: "external" | undefined;
+})[];
 }
 
 export type DatabaseItem = PostResultProperties & {
@@ -63,9 +78,11 @@ export type DatabaseItem = PostResultProperties & {
     IndustryCategory: PropertyValueRichText;
     MoneyName: PropertyValueRichText;
     Path: PropertyValueRichText;
+    Available: PropertyValueCheckbox;
     PublishedProduction: PropertyValueCheckbox;
     Priority: PropertyValueNumber;
     MetaTitle: PropertyValueRichText;
     MetaDescription: PropertyValueRichText;
+    Images: PropertyValueFiles;
   };
 };
