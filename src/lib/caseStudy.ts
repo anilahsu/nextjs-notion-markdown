@@ -43,6 +43,7 @@ export const extractPosts = async (
           ? postInDB.cover.external.url
           : null;
       const url = postInDB.url;
+      const available = postInDB.properties.Available.checkbox;
       const published = postInDB.properties.PublishedProduction.checkbox;
       const priority = postInDB.properties.Priority.number;
       const metaTitle = postInDB.properties.MoneyName.rich_text[0]
@@ -69,6 +70,7 @@ export const extractPosts = async (
         path,
         cover,
         url,
+        available,
         published,
         priority,
         metaTitle,

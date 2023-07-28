@@ -42,6 +42,7 @@ export interface IPost {
   path: string;
   cover: string | null;
   url: string;
+  available: boolean;
   published: boolean;
   priority: number | null;
   metaTitle: string;
