@@ -4,12 +4,11 @@ import { NotionToMarkdown } from "notion-to-md";
 import { notion } from "@/lib/notion";
 import ReactMarkdown from "react-markdown";
 import Image from "next/image";
-import sizeOf from "image-size";
-import url from "url";
-import https from "https";
 import styles from "@/styles/post.module.css";
 import { isDev } from "@/lib/config";
 import { IPost } from "@/lib/entryType";
+import { getImageDimensions } from "@/utils/getImageDimensions";
+import { addZeroWidthSpace } from "@/utils/addZeroWidthSpace";
 
 export async function getStaticPaths() {
   const allPosts = await getEntryPosts();
@@ -109,70 +108,3 @@ const NotionDomainDynamicPage = ({ property, markdown, imageSizes }: Props) => {
 
 export default NotionDomainDynamicPage;
 
-const getImageDimensions = async (markdown: string) => {
-  const imageSizes: Props["imageSizes"] = {};
-  const iterator = markdown.matchAll(/\!\[.*]\((.*)\)/g);
-
-  let match: IteratorResult<RegExpMatchArray, any>;
-  while (!(match = iterator.next()).done) {
-    const [, src] = match.value;
-    try {
-      if (src.startsWith("data:")) {
-        const base64Data = src.split(",")[1];
-        const buffer = Buffer.from(base64Data, "base64");
-        const { width, height } = sizeOf(buffer);
-        if (width && height) {
-          imageSizes[src] = { width, height };
-        }
-      } else {
-        const options = url.format(src);
-        const response = await getUrlImageSize(options);
-        const { width, height } = response;
-        if (width && height) {
-          imageSizes[src] = { width, height };
-        }
-      }
-    } catch (err) {
-      console.error(`Can’t get dimensions for ${src}:`, err);
-    }
-  }
-  return imageSizes;
-};
-
-const getUrlImageSize = (
-  options: string
-): Promise<{ width: number; height: number }> => {
-  return new Promise((resolve, reject) => {
-    https.get(options, (response) => {
-      const chunks: Buffer[] = [];
-      response
-        .on("data", (chunk) => {
-          chunks.push(chunk);
-        })
-        .on("end", () => {
-          const buffer = Buffer.concat(chunks);
-          const { width, height } = sizeOf(buffer);
-          if (width && height) {
-            resolve({ width, height });
-          }
-        })
-        .on("error", (err) => {
-          reject(err);
-        });
-    });
-  });
-};
-
-const addZeroWidthSpace = (text: string) => {
-  const punctuationRegex = /[“”「」『』【】〖〗〈〉《》）)。，]/g;
-  const boldItalicRegex = /(\*\*|__|\*|_)(.*?)\1/g;
-
-  const replacedText = text.replace(boldItalicRegex, (_, marker, content) => {
-    const updatedContent = content.replaceAll(
-      punctuationRegex,
-      (match: string) => "\u200B" + match + "\u200B"
-    );
-    return `${marker}${updatedContent}${marker}`;
-  });
-  return replacedText;
-};
