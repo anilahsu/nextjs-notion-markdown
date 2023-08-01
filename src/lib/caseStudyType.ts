@@ -26,6 +26,24 @@ export type PropertyValueCheckbox = ExtractedPropertyValue<"checkbox">;
 export type PropertyValueNumber = ExtractedPropertyValue<"number">;
 export type PropertyValueFiles = ExtractedPropertyValue<"files">;
 
+type Files = (
+  | {
+      file: {
+        url: string;
+        expiry_time: string;
+      };
+      name: string;
+      type?: "file" | undefined;
+    }
+  | {
+      external: {
+        url: string;
+      };
+      name: string;
+      type?: "external" | undefined;
+    }
+)[];
+
 export interface IPost {
   id: string;
   title: string;
@@ -47,20 +65,11 @@ export interface IPost {
   priority: number | null;
   metaTitle: string;
   metaDescription: string;
-  images: ({
-    file: {
-        url: string;
-        expiry_time: string;
-    };
-    name: string;
-    type?: "file" | undefined;
-} | {
-    external: {
-        url: string;
-    };
-    name: string;
-    type?: "external" | undefined;
-})[];
+  intervieweeAvatar: Files;
+  intervieweeName: string;
+  intervieweePosition: string;
+  intervieweeCareer: string;
+  imageSlider: Files;
 }
 
 export type DatabaseItem = PostResultProperties & {
@@ -84,6 +93,10 @@ export type DatabaseItem = PostResultProperties & {
     Priority: PropertyValueNumber;
     MetaTitle: PropertyValueRichText;
     MetaDescription: PropertyValueRichText;
-    Images: PropertyValueFiles;
+    IntervieweeAvatar: PropertyValueFiles;
+    IntervieweeName: PropertyValueRichText;
+    IntervieweeCareer: PropertyValueRichText;
+    IntervieweePosition: PropertyValueRichText;
+    ImageSlider: PropertyValueFiles;
   };
 };

@@ -47,12 +47,24 @@ export const extractPosts = async (
       const published = postInDB.properties.PublishedProduction.checkbox;
       const priority = postInDB.properties.Priority.number;
       const metaTitle = postInDB.properties.MoneyName.rich_text[0]
-      ? postInDB.properties.MoneyName.rich_text[0].plain_text
-      : "";
+        ? postInDB.properties.MoneyName.rich_text[0].plain_text
+        : "";
       const metaDescription = postInDB.properties.MoneyName.rich_text[0]
-      ? postInDB.properties.MoneyName.rich_text[0].plain_text
-      : "";
-      const images = postInDB.properties.Images.files
+        ? postInDB.properties.MoneyName.rich_text[0].plain_text
+        : "";
+      const intervieweeAvatar = postInDB.properties.IntervieweeAvatar.files;
+      const intervieweeName = postInDB.properties.IntervieweeName.rich_text[0]
+        ? postInDB.properties.IntervieweeName.rich_text[0].plain_text
+        : "";
+      const intervieweeCareer = postInDB.properties.IntervieweeCareer
+        .rich_text[0]
+        ? postInDB.properties.IntervieweeCareer.rich_text[0].plain_text
+        : "";
+      const intervieweePosition = postInDB.properties.IntervieweePosition
+        .rich_text[0]
+        ? postInDB.properties.IntervieweePosition.rich_text[0].plain_text
+        : "";
+      const imageSlider = postInDB.properties.ImageSlider.files;
 
       const post: IPost = {
         id: postInDB.id,
@@ -75,7 +87,11 @@ export const extractPosts = async (
         priority,
         metaTitle,
         metaDescription,
-        images,
+        intervieweeAvatar,
+        intervieweeName,
+        intervieweeCareer,
+        intervieweePosition,
+        imageSlider,
       };
       return post;
     })
