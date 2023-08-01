@@ -11,7 +11,7 @@ import { getImageDimensions } from "@/utils/getImageDimensions";
 import { addZeroWidthSpace } from "@/utils/addZeroWidthSpace";
 import { parseMarkdown } from "@/utils/parseMarkdown";
 import ServiceIntroduction from "@/components/ServiceIntroduction";
-import IntervieweeImages from "@/components/IntervieweeImages";
+import IntervieweeInfo from "@/components/IntervieweeInfo";
 
 export async function getStaticPaths() {
   const allPosts = await getCaseStudyPosts();
@@ -96,15 +96,14 @@ const StaticComponent = ({
   switch (name) {
     case "service_intro_component":
       return <ServiceIntroduction context={context} />;
-    case "interviewee_images":
-      return <IntervieweeImages context={context} />;
+    case "interviewee_info":
+      return <IntervieweeInfo context={context} />;
     default:
       return null;
   }
 };
 
 const NotionDomainDynamicPage = ({ property, blocks, imageSizes }: Props) => {
-  // console.log(property && property.images.map((image) => image.name))
   return (
     <div className={styles.container}>
       <h1>{property && property.title}</h1>
