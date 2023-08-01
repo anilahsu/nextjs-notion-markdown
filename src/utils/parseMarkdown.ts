@@ -4,10 +4,10 @@ export const parseMarkdown = (markdown: string) => {
   let count = 0;
   try {
     let text = markdown;
-    while (true) {
-      console.log(count++);
+    while (text) {
+      // console.log(count++);
       const mat = text.match(/^@\{\{\{\s*?([^\s]+)\s*?\}\}\}@/m);
-      // console.log(mat)
+      // console.log( mat ,` mat0: ${mat!=null && mat[0]}, mat1: ${ mat!=null && mat[1]} `)
       if (mat === null) {
         if (text.length > 0) {
           blocks.push({ kind: "markdown", data: text });
@@ -23,7 +23,7 @@ export const parseMarkdown = (markdown: string) => {
       if (key.length > 0) {
         blocks.push({ kind: "static", data: key });
       }
-      if (mat.index) {
+      if (mat.index || mat.index === 0) {
         console.log(
           `mat index: ${mat.index}, mat0: ${mat[0]}, mat1: ${mat[1]} `
         );
