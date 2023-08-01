@@ -4,12 +4,12 @@ import { NotionToMarkdown } from "notion-to-md";
 import { notion } from "@/lib/notion";
 import ReactMarkdown from "react-markdown";
 import Image from "next/image";
-import sizeOf from "image-size";
-import url from "url";
-import https from "https";
 import styles from "@/styles/post.module.css";
 import { isDev } from "@/lib/config";
 import { IPost } from "@/lib/caseStudyType";
+import { getImageDimensions } from "@/utils/getImageDimensions";
+import { addZeroWidthSpace } from "@/utils/addZeroWidthSpace";
+import { parseMarkdown } from "@/utils/parseMarkdown";
 
 export async function getStaticPaths() {
   const allPosts = await getCaseStudyPosts();
@@ -47,7 +47,6 @@ export const getStaticProps = async ({ params: { slug } }: Params) => {
   const currentPost = allPosts.filter((post) => {
     return post.path === slug;
   });
-  console.log("currentPost", currentPost);
 
   const property = currentPost[0];
   const id = property.id;
@@ -55,13 +54,20 @@ export const getStaticProps = async ({ params: { slug } }: Params) => {
   const mdString = n2m.toMarkdownString(mdblocks);
   const markdown = mdString.parent;
 
-  const newMarkdown = addZeroWidthSpace(markdown);
   const imageSizes = await getImageDimensions(markdown);
+
+  const blocks = parseMarkdown(markdown);
+  const newBlocks = blocks.map((block) => {
+    if (block.kind === "markdown") {
+      block.data = addZeroWidthSpace(block.data);
+    }
+    return block;
+  });
   return {
     props: {
       mdString,
       property,
-      markdown: newMarkdown,
+      blocks: newBlocks,
       imageSizes,
     },
     revalidate: 10,
@@ -71,111 +77,77 @@ export const getStaticProps = async ({ params: { slug } }: Params) => {
 type Props = {
   mdString: MdStringObject;
   property: IPost;
-  markdown: string;
+  blocks: {
+    kind: string;
+    data: string;
+  }[];
   imageSizes: Record<string, { width: number; height: number }>;
 };
 
-const NotionDomainDynamicPage = ({ property, markdown, imageSizes }: Props) => {
+const StaticComponent = ({
+  name,
+  context,
+}: {
+  name: string;
+  context: IPost;
+}) => {
+  return <></>
+};
+
+const NotionDomainDynamicPage = ({ property, blocks, imageSizes }: Props) => {
+  // console.log(property && property.images.map((image) => image.name))
   return (
     <div className={styles.container}>
       <h1>{property && property.title}</h1>
       <p>{property && property.companyName}</p>
-      <ReactMarkdown
-        remarkPlugins={[]}
-        className={styles.reactMarkDown}
-        components={{
-          img: (props) => {
-            if (props.src && imageSizes[props.src]) {
-              if (!props.src.startsWith("data:")) {
-                const { src, alt } = props;
-                const { width, height } = imageSizes[props.src];
-                return (
-                  <Image
-                    src={src}
-                    alt={alt || ""}
-                    width={width}
-                    height={height}
-                  />
-                );
-              }
-            } else {
-              return <img {...props} />;
-            }
-          },
-        }}
-      >
-        {markdown}
-      </ReactMarkdown>
+      {blocks &&
+        blocks.map((block, index) => {
+          switch (block.kind) {
+            case "markdown":
+              return (
+                <ReactMarkdown
+                  key={index}
+                  remarkPlugins={[]}
+                  className={styles.reactMarkDown}
+                  components={{
+                    img: (props) => {
+                      if (props.src && imageSizes[props.src]) {
+                        if (!props.src.startsWith("data:")) {
+                          const { src, alt } = props;
+                          const { width, height } = imageSizes[props.src];
+                          return (
+                            <Image
+                              src={src}
+                              alt={alt || ""}
+                              width={width}
+                              height={height}
+                            />
+                          );
+                        }
+                      } else {
+                        return <img {...props} />;
+                      }
+                    },
+                  }}
+                >
+                  {block.data}
+                </ReactMarkdown>
+              );
+            case "static":
+              return (
+                <StaticComponent
+                  name={block.data}
+                  context={property}
+                  key={index}
+                />
+              );
+            default:
+              return null;
+          }
+        })}
     </div>
   );
 };
 
 export default NotionDomainDynamicPage;
 
-const getImageDimensions = async (markdown: string) => {
-  const imageSizes: Props["imageSizes"] = {};
-  const iterator = markdown.matchAll(/\!\[.*]\((.*)\)/g);
-
-  let match: IteratorResult<RegExpMatchArray, any>;
-  while (!(match = iterator.next()).done) {
-    const [, src] = match.value;
-    try {
-      if (src.startsWith("data:")) {
-        const base64Data = src.split(",")[1];
-        const buffer = Buffer.from(base64Data, "base64");
-        const { width, height } = sizeOf(buffer);
-        if (width && height) {
-          imageSizes[src] = { width, height };
-        }
-      } else {
-        const options = url.format(src);
-        const response = await getUrlImageSize(options);
-        const { width, height } = response;
-        if (width && height) {
-          imageSizes[src] = { width, height };
-        }
-      }
-    } catch (err) {
-      console.error(`Can’t get dimensions for ${src}:`, err);
-    }
-  }
-  return imageSizes;
-};
-
-const getUrlImageSize = (
-  options: string
-): Promise<{ width: number; height: number }> => {
-  return new Promise((resolve, reject) => {
-    https.get(options, (response) => {
-      const chunks: Buffer[] = [];
-      response
-        .on("data", (chunk) => {
-          chunks.push(chunk);
-        })
-        .on("end", () => {
-          const buffer = Buffer.concat(chunks);
-          const { width, height } = sizeOf(buffer);
-          if (width && height) {
-            resolve({ width, height });
-          }
-        })
-        .on("error", (err) => {
-          reject(err);
-        });
-    });
-  });
-};
-
-const addZeroWidthSpace = (text: string) => {
-  const punctuationRegex = /[“”「」『』【】〖〗〈〉《》）)。，]/g;
-  const boldItalicRegex = /(\*\*|__|\*|_)(.*?)\1/g;
-
-  const replacedText = text.replace(boldItalicRegex, (_, marker, content) => {
-    const updatedContent = content.replaceAll(
-      punctuationRegex,
-      (match: string) => "\u200B" + match + "\u200B"
-    );
-    return `${marker}${updatedContent}${marker}`;
-  });
-  return replacedText;
-};
