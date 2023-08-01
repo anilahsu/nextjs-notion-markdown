@@ -10,6 +10,8 @@ import { IPost } from "@/lib/caseStudyType";
 import { getImageDimensions } from "@/utils/getImageDimensions";
 import { addZeroWidthSpace } from "@/utils/addZeroWidthSpace";
 import { parseMarkdown } from "@/utils/parseMarkdown";
+import ServiceIntroduction from "@/components/ServiceIntroduction";
+import IntervieweeImages from "@/components/IntervieweeImages";
 
 export async function getStaticPaths() {
   const allPosts = await getCaseStudyPosts();
@@ -91,7 +93,14 @@ const StaticComponent = ({
   name: string;
   context: IPost;
 }) => {
-  return <></>
+  switch (name) {
+    case "service_intro_component":
+      return <ServiceIntroduction context={context} />;
+    case "interviewee_images":
+      return <IntervieweeImages context={context} />;
+    default:
+      return null;
+  }
 };
 
 const NotionDomainDynamicPage = ({ property, blocks, imageSizes }: Props) => {
