@@ -95,7 +95,7 @@ const StaticComponent = ({
 }) => {
   switch (name) {
     case "service_intro_component":
-      return <ServiceIntroduction context={context} />;
+      return <ServiceIntroduction />;
     case "interviewee_info":
       return <IntervieweeInfo context={context} />;
     default:

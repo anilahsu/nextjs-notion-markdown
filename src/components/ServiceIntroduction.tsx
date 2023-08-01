@@ -1,9 +1,8 @@
-import { IPost } from "@/lib/caseStudyType";
 import styled from "@emotion/styled";
 import Image from "next/image";
 import Link from "next/link";
 
-const ServiceIntroduction = ({ context }: { context: IPost }) => {
+const ServiceIntroduction = () => {
   return (
     <DocumentRequestContainer>
       <h4>Pokepayサービス資料</h4>
