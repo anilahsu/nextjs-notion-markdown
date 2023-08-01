@@ -69,7 +69,7 @@ export interface IPost {
   intervieweeName: string;
   intervieweePosition: string;
   intervieweeCareer: string;
-  imageSlider: Files;
+  imageSlider?: Files;
 }
 
 export type DatabaseItem = PostResultProperties & {
