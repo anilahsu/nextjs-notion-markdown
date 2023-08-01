@@ -47,8 +47,8 @@ export const getStaticProps = async ({ params: { slug } }: Params) => {
 
   const property = currentPost[0];
   const id = property.id;
-  const mdblocks = await n2m.pageToMarkdown(id);
-  const mdString = n2m.toMarkdownString(mdblocks);
+  const mdBlocks = await n2m.pageToMarkdown(id);
+  const mdString = n2m.toMarkdownString(mdBlocks);
   const markdown = mdString.parent;
 
   const newMarkdown = addZeroWidthSpace(markdown);
