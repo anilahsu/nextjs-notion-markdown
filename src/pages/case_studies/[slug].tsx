@@ -12,6 +12,7 @@ import { addZeroWidthSpace } from "@/utils/addZeroWidthSpace";
 import { parseMarkdown } from "@/utils/parseMarkdown";
 import ServiceIntroduction from "@/components/ServiceIntroduction";
 import IntervieweeInfo from "@/components/IntervieweeInfo";
+import ImageSlider from "@/components/ImageSlider";
 
 export async function getStaticPaths() {
   const allPosts = await getCaseStudyPosts();
@@ -96,6 +97,8 @@ const StaticComponent = ({
   switch (name) {
     case "service_intro_component":
       return <ServiceIntroduction />;
+    case "image_slider":
+        return <ImageSlider context={context} />;
     case "interviewee_info":
       return <IntervieweeInfo context={context} />;
     default:
