@@ -1,5 +1,6 @@
 import { IPost } from "@/lib/caseStudyType";
 import styled from "@emotion/styled";
+import Carousel from "@/components/Carousel";
 
 const ImageSlider = ({ context }: { context: IPost }) => {
   console.log(context.imageSlider)
@@ -18,11 +19,11 @@ const ImageSlider = ({ context }: { context: IPost }) => {
   return (
     <>
       {images && images.length > 0 && (
-        <div>
+        <Carousel>
           {images.map((image, index) => (
             <Item key={index} image={image ? image : ""} />
           ))}
-        </div>
+        </Carousel>
       )}
     </>
   );
