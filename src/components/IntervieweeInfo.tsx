@@ -3,14 +3,27 @@ import styled from "@emotion/styled";
 import Image from "next/image";
 
 const IntervieweeInfo = ({ context }: { context: IPost }) => {
-  const avatar = context.intervieweeAvatar.map((image) => image.name)[0];
+  const avatar = context.intervieweeAvatar.map((image) => {
+    if (image.type === "file") {
+      return image.file.url;
+    } else if (image.type === "external") {
+      return image.external.url;
+    } else {
+      return null;
+    }
+  })[0];
   return (
     <>
       <DecisiveFactor>ポケペイ導入の決め手</DecisiveFactor>
       <QuestionHeader>
         <AvatarContainer>
           {context.intervieweeAvatar ? (
-            <Avatar width={200} height={200} src={avatar} alt="" />
+            <Avatar
+              width={200}
+              height={200}
+              src={avatar ? avatar : ""}
+              alt=""
+            />
           ) : (
             ""
           )}
@@ -42,7 +55,7 @@ const DecisiveFactor = styled.p`
   width: 270px;
   margin: 50px auto 40px auto;
   text-align: center;
-`
+`;
 const QuestionHeader = styled.div`
   text-align: center;
   p {
