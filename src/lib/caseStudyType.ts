@@ -26,7 +26,7 @@ export type PropertyValueCheckbox = ExtractedPropertyValue<"checkbox">;
 export type PropertyValueNumber = ExtractedPropertyValue<"number">;
 export type PropertyValueFiles = ExtractedPropertyValue<"files">;
 
-type Files = (
+export type File = (
   | {
       file: {
         url: string;
@@ -42,7 +42,7 @@ type Files = (
       name: string;
       type?: "external" | undefined;
     }
-)[];
+);
 
 export interface IPost {
   id: string;
@@ -65,11 +65,11 @@ export interface IPost {
   priority: number | null;
   metaTitle: string;
   metaDescription: string;
-  intervieweeAvatar: Files;
+  intervieweeAvatar: File[];
   intervieweeName: string;
   intervieweePosition: string;
   intervieweeCareer: string;
-  imageSlider?: Files;
+  imageSlider?: File[];
 }
 
 export type DatabaseItem = PostResultProperties & {
