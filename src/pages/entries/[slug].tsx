@@ -49,7 +49,7 @@ export const getStaticProps = async ({ params: { slug } }: Params) => {
   const id = property.id;
   const mdBlocks = await n2m.pageToMarkdown(id);
   const mdString = n2m.toMarkdownString(mdBlocks);
-  const markdown = mdString.parent;
+  const markdown = mdString.parent ? mdString.parent : "";
 
   const newMarkdown = addZeroWidthSpace(markdown);
   const imageSizes = await getImageDimensions(markdown);
