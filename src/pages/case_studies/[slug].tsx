@@ -20,21 +20,21 @@ export async function getStaticPaths() {
     return post.path;
   });
 
-  if (isDev) {
+  // if (isDev) {
     return {
       paths: [],
-      fallback: true,
+      fallback: "blocking",
     };
-  }
-  const staticPaths = {
-    paths: allPaths.map((slug) => ({
-      params: {
-        slug,
-      },
-    })),
-    fallback: "blocking",
-  };
-  return staticPaths;
+  // }
+  // const staticPaths = {
+  //   paths: allPaths.map((slug) => ({
+  //     params: {
+  //       slug,
+  //     },
+  //   })),
+  //   fallback: "blocking",
+  // };
+  // return staticPaths;
 }
 
 const n2m = new NotionToMarkdown({ notionClient: notion });
@@ -160,4 +160,3 @@ const NotionDomainDynamicPage = ({ property, blocks, imageSizes }: Props) => {
 };
 
 export default NotionDomainDynamicPage;
-

@@ -15,21 +15,21 @@ export async function getStaticPaths() {
   const allPaths = allPosts.map((post) => {
     return post.path;
   });
-  if (isDev) {
+  // if (isDev) {
     return {
       paths: [],
-      fallback: true,
+      fallback: "blocking",
     };
-  }
-  const staticPaths = {
-    paths: allPaths.map((slug) => ({
-      params: {
-        slug,
-      },
-    })),
-    fallback: "blocking",
-  };
-  return staticPaths;
+  // }
+  // const staticPaths = {
+  //   paths: allPaths.map((slug) => ({
+  //     params: {
+  //       slug,
+  //     },
+  //   })),
+  //   fallback: "blocking",
+  // };
+  // return staticPaths;
 }
 const n2m = new NotionToMarkdown({ notionClient: notion });
 
