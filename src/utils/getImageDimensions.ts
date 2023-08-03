@@ -10,6 +10,7 @@ type Props = {
   markdown: string;
   imageSizes: Record<string, { width: number; height: number }>;
 };
+
 export const getImageDimensions = async (markdown: string) => {
   const imageSizes: Props["imageSizes"] = {};
   const iterator = markdown.matchAll(/\!\[.*]\((.*)\)/g);
@@ -47,7 +48,7 @@ export const getUrlImageSize = (
     https.get(options, (response) => {
       const chunks: Buffer[] = [];
       response
-        .on("data", (chunk) => {
+        .on("data", (chunk: Buffer) => {
           chunks.push(chunk);
         })
         .on("end", () => {
