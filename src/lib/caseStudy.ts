@@ -2,6 +2,29 @@ import { QueryDatabaseResponse } from "@notionhq/client/build/src/api-endpoints"
 import { DatabaseItem, IPost } from "./caseStudyType";
 import { notion } from "./notion";
 
+type Props = (({
+  type: "external";
+  external: {
+      url: string;
+  };
+} | {
+  type: "file";
+  file: {
+      url: string;
+      expiry_time: string;
+  };
+}) & string) | null
+
+const getCover = (props: Props) => {
+  if (props && props.type === "file") {
+    return props.file.url
+  } else if (props && props.type === "external") {
+    return props.external.url
+  } else {
+    return null
+  }
+};
+
 export const extractPosts = async (
   response: QueryDatabaseResponse
 ): Promise<IPost[]> => {
@@ -38,10 +61,7 @@ export const extractPosts = async (
       const path = postInDB.properties.Path.rich_text[0]
         ? postInDB.properties.Path.rich_text[0].plain_text
         : "";
-      const cover =
-        postInDB.cover?.type === "external"
-          ? postInDB.cover.external.url
-          : null;
+      const cover = postInDB.cover && getCover(postInDB.cover);
       const url = postInDB.url;
       const available = postInDB.properties.Available.checkbox;
       const published = postInDB.properties.PublishedProduction.checkbox;
