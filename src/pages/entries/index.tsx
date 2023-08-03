@@ -25,11 +25,12 @@ export const getStaticProps: GetStaticProps = async () => {
     }
     return 0; // Objects are equal
   });
-  
+
   return {
     props: {
       posts: publishedPosts,
     },
+    revalidate: 1,
   };
 };
 
