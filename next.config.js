@@ -11,6 +11,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'pokepay-assets.s3.ap-northeast-1.amazonaws.com',
       },
+      {
+        protocol: 'https',
+        hostname: 's3.us-west-2.amazonaws.com',
+      },
     ],
   },
 }
