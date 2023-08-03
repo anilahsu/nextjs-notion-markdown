@@ -72,7 +72,7 @@ export const getStaticProps = async ({ params: { slug } }: Params) => {
       blocks: newBlocks,
       imageSizes,
     },
-    revalidate: 10,
+    revalidate: 1,
   };
 };
 

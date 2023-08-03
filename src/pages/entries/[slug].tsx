@@ -60,7 +60,7 @@ export const getStaticProps = async ({ params: { slug } }: Params) => {
       markdown: newMarkdown,
       imageSizes,
     },
-    revalidate: 10,
+    revalidate: 1,
   };
 };
 
