@@ -91,12 +91,12 @@ export type DatabaseItem = PostResultProperties & {
     Available: PropertyValueCheckbox;
     PublishedProduction: PropertyValueCheckbox;
     Priority: PropertyValueNumber;
-    MetaTitle: PropertyValueRichText;
-    MetaDescription: PropertyValueRichText;
     IntervieweeAvatar: PropertyValueFiles;
     IntervieweeName: PropertyValueRichText;
     IntervieweeCareer: PropertyValueRichText;
     IntervieweePosition: PropertyValueRichText;
     ImageSlider: PropertyValueFiles;
+    MetaTitle: PropertyValueRichText;
+    MetaDescription: PropertyValueRichText;
   };
 };

@@ -66,11 +66,11 @@ export const extractPosts = async (
       const available = postInDB.properties.Available.checkbox;
       const published = postInDB.properties.PublishedProduction.checkbox;
       const priority = postInDB.properties.Priority.number;
-      const metaTitle = postInDB.properties.MoneyName.rich_text[0]
-        ? postInDB.properties.MoneyName.rich_text[0].plain_text
+      const metaTitle = postInDB.properties.MetaTitle.rich_text[0]
+        ? postInDB.properties.MetaTitle.rich_text[0].plain_text
         : "";
-      const metaDescription = postInDB.properties.MoneyName.rich_text[0]
-        ? postInDB.properties.MoneyName.rich_text[0].plain_text
+      const metaDescription = postInDB.properties.MetaDescription.rich_text[0]
+        ? postInDB.properties.MetaDescription.rich_text[0].plain_text
         : "";
       const intervieweeAvatar = postInDB.properties.IntervieweeAvatar.files;
       const intervieweeName = postInDB.properties.IntervieweeName.rich_text[0]
