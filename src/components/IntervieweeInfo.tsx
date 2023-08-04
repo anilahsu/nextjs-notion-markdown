@@ -16,18 +16,20 @@ const IntervieweeInfo = ({ context }: { context: IPost }) => {
     <>
       <DecisiveFactor>ポケペイ導入の決め手</DecisiveFactor>
       <QuestionHeader>
-        <AvatarContainer>
-          {context.intervieweeAvatar ? (
-            <Avatar
-              width={200}
-              height={200}
-              src={avatar ? avatar : ""}
-              alt=""
-            />
-          ) : (
-            ""
-          )}
-        </AvatarContainer>
+        {context.intervieweeName && (
+          <AvatarContainer>
+            {context.intervieweeAvatar ? (
+              <Avatar
+                width={200}
+                height={200}
+                src={avatar ? avatar : ""}
+                alt=""
+              />
+            ) : (
+              ""
+            )}
+          </AvatarContainer>
+        )}
         {context.intervieweePosition && <p>{context.intervieweePosition}</p>}
         {context.intervieweeName && (
           <h2 className={!context.intervieweePosition ? "no-position" : ""}>
