@@ -43,9 +43,9 @@ export const extractPosts = async (
       const refLink = postInDB.properties.RefLink
         ? postInDB.properties.RefLink.url
         : null;
-      const createdTime = postInDB.properties.CreatedTime.date
-        ? Object.values(postInDB.properties.CreatedTime.date)
-        : [];
+      const createdTime = postInDB.properties.CreatedTime.created_time
+        ? postInDB.properties.CreatedTime.created_time
+        : "";
       const lastEditedTime = postInDB.properties.LastEditedTime
         ? postInDB.properties.LastEditedTime.last_edited_time
         : "";
@@ -94,7 +94,7 @@ export const extractPosts = async (
         topic: topic.map((item) => item.name),
         scale: scale.map((item) => item.name),
         refLink,
-        createdTime: createdTime.join(),
+        createdTime: createdTime,
         modifiedDate: lastEditedTime,
         companyName,
         industryCategory,

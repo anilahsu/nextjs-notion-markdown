@@ -83,7 +83,7 @@ export type DatabaseItem = PostResultProperties & {
     Scale: PropertyValueMultiSelect;
     RefLink: PropertyValueUrl;
     LastEditedTime: PropertyValueEditedTime;
-    CreatedTime: PropertyValueDate;
+    CreatedTime: PropertyValueCreatedTime;
     CompanyName: PropertyValueRichText;
     IndustryCategory: PropertyValueRichText;
     MoneyName: PropertyValueRichText;
