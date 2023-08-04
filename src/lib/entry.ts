@@ -29,8 +29,17 @@ export const extractPosts = async (
           ? postInDB.cover.external.url
           : null;
       const url = postInDB.url;
+      const available = postInDB.properties.Available.checkbox;
       const published = postInDB.properties.PublishedProduction.checkbox;
-      const priority = postInDB.properties.Priority.number;
+      const date = postInDB.properties.Date.date
+      ? Object.values(postInDB.properties.Date.date)
+      : [];
+      const metaTitle = postInDB.properties.MetaTitle.rich_text[0]
+        ? postInDB.properties.MetaTitle.rich_text[0].plain_text
+        : "";
+      const metaDescription = postInDB.properties.MetaDescription.rich_text[0]
+        ? postInDB.properties.MetaDescription.rich_text[0].plain_text
+        : "";
 
       const post: IPost = {
         id: postInDB.id,
@@ -43,7 +52,10 @@ export const extractPosts = async (
         cover,
         url,
         published,
-        priority,
+        available,
+        date: date.join(),
+        metaTitle,
+        metaDescription,
       };
       return post;
     })

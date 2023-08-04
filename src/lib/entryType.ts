@@ -37,7 +37,10 @@ export interface IPost {
   cover: string | null;
   url: string;
   published: boolean;
-  priority: number | null;
+  available: boolean;
+  date: string;
+  metaTitle: string;
+  metaDescription: string;
 }
 
 export type DatabaseItem = PostResultProperties & {
@@ -45,12 +48,15 @@ export type DatabaseItem = PostResultProperties & {
   url: string;
   properties: {
     Title: PropertyValueTitle;
+    Path: PropertyValueRichText;
     Description: PropertyValueRichText;
     Categories: PropertyValueMultiSelect;
     CreatedTime: PropertyValueCreatedTime;
     LastEditedTime: PropertyValueEditedTime;
-    Path: PropertyValueRichText;
+    Available: PropertyValueCheckbox;
     PublishedProduction: PropertyValueCheckbox;
-    Priority: PropertyValueNumber;
+    Date: PropertyValueDate;
+    MetaTitle: PropertyValueRichText;
+    MetaDescription: PropertyValueRichText;
   };
 };
