@@ -16,10 +16,10 @@ const nextConfig = {
         hostname: 's3.us-west-2.amazonaws.com',
       },
     ],
-    experimental: {
-      // Defaults to 50MB
-      isrMemoryCacheSize: 0,
-    },
+  },
+  experimental: {
+    // Defaults to 50MB
+    isrMemoryCacheSize: 0,
   },
 }
 
