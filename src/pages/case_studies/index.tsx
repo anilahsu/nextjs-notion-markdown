@@ -1,15 +1,15 @@
-import { GetStaticProps, InferGetStaticPropsType } from "next";
+import { GetStaticProps } from "next";
 import { IPost } from "@/lib/caseStudyType";
 import { getCaseStudyPosts } from "@/lib/caseStudy";
 import Link from "next/link";
 import styled from "@emotion/styled";
 import Image from "next/image";
 import { useAllPosts } from "@/hooks/use-all-posts";
-import { FilterOrder } from "@/utils/filterOrderPosts";
+import { FilterOrderData } from "@/utils/filterOrderPosts";
 
 export const getStaticProps: GetStaticProps = async () => {
   const posts = await getCaseStudyPosts();
-  const publishedPosts = FilterOrder(posts);
+  const publishedPosts = FilterOrderData(posts);
 
   return {
     props: {
