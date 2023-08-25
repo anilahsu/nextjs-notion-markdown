@@ -1,6 +1,6 @@
 import { getCaseStudyPosts } from "@/lib/caseStudy";
 import { IPost } from "@/lib/caseStudyType";
-import { FilterOrder } from "@/utils/FilterOrder";
+import { FilterOrder } from "@/utils/filterOrderPosts";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export interface PostsQuery {}
