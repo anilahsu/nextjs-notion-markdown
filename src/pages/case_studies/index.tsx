@@ -1,45 +1,36 @@
-import { GetStaticProps } from "next";
+import { GetStaticProps, InferGetStaticPropsType } from "next";
 import { IPost } from "@/lib/caseStudyType";
 import { getCaseStudyPosts } from "@/lib/caseStudy";
 import Link from "next/link";
 import styled from "@emotion/styled";
 import Image from "next/image";
+import { useAllPosts } from "@/hooks/use-all-posts";
+import { FilterOrder } from "@/utils/FilterOrder";
 
 export const getStaticProps: GetStaticProps = async () => {
   const posts = await getCaseStudyPosts();
-  const publishedPosts = posts.filter((post) => post.published);
-
-  publishedPosts.sort((a, b) => {
-    // sort by priority in ascending order
-    if (a.priority && b.priority && a.priority > b.priority) {
-      return 1;
-    }
-    if (a.priority && b.priority && a.priority < b.priority) {
-      return -1;
-    }
-    // If priority is equal, sort by modifiedDate in descending order
-    if (new Date(a.modifiedDate) > new Date(b.modifiedDate)) {
-      return -1;
-    }
-    if (new Date(a.modifiedDate) < new Date(b.modifiedDate)) {
-      return 1;
-    }
-    return 0; // Objects are equal
-  });
+  const publishedPosts = FilterOrder(posts);
 
   return {
     props: {
-      posts: publishedPosts,
+      fallbackData: publishedPosts ,
     },
     revalidate: 1,
   };
 };
 
 interface Props {
-  posts: IPost[];
+  fallbackData: IPost[];
 }
 
-const CaseStudyList = ({ posts }: Props) => {
+const CaseStudyList = ({fallbackData}: Props) => {
+  const { data, isLoading } = useAllPosts({
+    fallbackData,
+    revalidateOnMount: false,
+  });
+
+  const posts = !isLoading && data?.publishedPosts ? data.publishedPosts: fallbackData;
+
   return (
     <Container>
       <h1>Case Study Post</h1>
