@@ -1,18 +1,16 @@
 import { getCaseStudyPosts } from "@/lib/caseStudy";
-import { MdStringObject } from "notion-to-md/build/types";
-import { NotionToMarkdown } from "notion-to-md";
-import { notion } from "@/lib/notion";
 import ReactMarkdown from "react-markdown";
 import Image from "next/image";
 import styles from "@/styles/post.module.css";
 import { isDev } from "@/lib/config";
 import { IPost } from "@/lib/caseStudyType";
-import { getImageDimensions } from "@/utils/getImageDimensions";
-import { addZeroWidthSpace } from "@/utils/addZeroWidthSpace";
-import { parseMarkdown } from "@/utils/parseMarkdown";
+
 import ServiceIntroduction from "@/components/ServiceIntroduction";
 import IntervieweeInfo from "@/components/IntervieweeInfo";
 import ImageSlider from "@/components/ImageSlider";
+import { usePost } from "@/hooks/use-post";
+import { getPost } from "@/lib/getPost";
+import { InferGetStaticPropsType } from "next/types";
 
 export async function getStaticPaths() {
   const allPosts = await getCaseStudyPosts();
@@ -20,24 +18,22 @@ export async function getStaticPaths() {
     return post.path;
   });
 
-  // if (isDev) {
+  if (isDev) {
     return {
       paths: [],
       fallback: "blocking",
     };
-  // }
-  // const staticPaths = {
-  //   paths: allPaths.map((slug) => ({
-  //     params: {
-  //       slug,
-  //     },
-  //   })),
-  //   fallback: "blocking",
-  // };
-  // return staticPaths;
+  }
+  const staticPaths = {
+    paths: allPaths.map((slug) => ({
+      params: {
+        slug,
+      },
+    })),
+    fallback: "blocking",
+  };
+  return staticPaths;
 }
-
-const n2m = new NotionToMarkdown({ notionClient: notion });
 
 type Params = {
   params: {
@@ -53,31 +49,23 @@ export const getStaticProps = async ({ params: { slug } }: Params) => {
 
   const property = currentPost[0];
   const id = property.id;
-  const mdBlocks = await n2m.pageToMarkdown(id);
-  const mdString = n2m.toMarkdownString(mdBlocks);
-  const markdown = mdString.parent ? mdString.parent : "";
-  
-  const imageSizes = await getImageDimensions(markdown);
-  const blocks = parseMarkdown(markdown);
-  const newBlocks = blocks.map((block) => {
-    if (block.kind === "markdown") {
-      block.data = addZeroWidthSpace(block.data);
-    }
-    return block;
-  });
+  const { imageSizes, blocks } = await getPost(id);
+
   return {
     props: {
-      mdString,
+      id,
       property,
-      blocks: newBlocks,
-      imageSizes,
+      fallbackData: {
+        blocks,
+        imageSizes,
+      },
     },
     revalidate: 1,
   };
 };
 
-type Props = {
-  mdString: MdStringObject;
+type CaseStudyPostProps = {
+  id: string;
   property: IPost;
   blocks: {
     kind: string;
@@ -97,7 +85,7 @@ const StaticComponent = ({
     case "service_intro_component":
       return <ServiceIntroduction />;
     case "image_slider":
-        return <ImageSlider context={context} />;
+      return <ImageSlider context={context} />;
     case "interviewee_info":
       return <IntervieweeInfo context={context} />;
     default:
@@ -105,13 +93,25 @@ const StaticComponent = ({
   }
 };
 
-const NotionDomainDynamicPage = ({ property, blocks, imageSizes }: Props) => {
+const NotionDomainDynamicPage = ({
+  id,
+  property,
+  fallbackData
+}: InferGetStaticPropsType<typeof getStaticProps>) => {
+  const { data, isLoading } = usePost({
+    id,
+    fallbackData,
+    revalidateOnMount: false,
+  });
+
+  const post = !isLoading && data?.post ? data.post : fallbackData;
+
   return (
     <div className={styles.container}>
       <h1>{property && property.title}</h1>
       <p>{property && property.companyName}</p>
-      {blocks &&
-        blocks.map((block, index) => {
+      {post.blocks &&
+        post.blocks.map((block, index) => {
           switch (block.kind) {
             case "markdown":
               return (
@@ -121,10 +121,10 @@ const NotionDomainDynamicPage = ({ property, blocks, imageSizes }: Props) => {
                   className={styles.reactMarkDown}
                   components={{
                     img: (props) => {
-                      if (props.src && imageSizes[props.src]) {
+                      if (props.src && post.imageSizes[props.src]) {
                         if (!props.src.startsWith("data:")) {
                           const { src, alt } = props;
-                          const { width, height } = imageSizes[props.src];
+                          const { width, height } = post.imageSizes[props.src];
                           return (
                             <Image
                               src={src}
