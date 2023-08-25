@@ -5,7 +5,7 @@ import Link from "next/link";
 import styled from "@emotion/styled";
 import Image from "next/image";
 import { useAllPosts } from "@/hooks/use-all-posts";
-import { FilterOrder } from "@/utils/FilterOrder";
+import { FilterOrder } from "@/utils/filterOrderPosts";
 
 export const getStaticProps: GetStaticProps = async () => {
   const posts = await getCaseStudyPosts();
