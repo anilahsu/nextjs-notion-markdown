@@ -4,7 +4,7 @@ import { getCaseStudyPosts } from "@/lib/getCaseStudyPosts";
 import Link from "next/link";
 import styled from "@emotion/styled";
 import Image from "next/image";
-import { useAllPosts } from "@/hooks/use-all-posts";
+import { useAllPosts } from "@/hooks/use-case_study-posts";
 import { FilterOrderCaseStudies } from "@/utils/filterSortCaseStudies";
 
 export const getStaticProps: GetStaticProps = async () => {

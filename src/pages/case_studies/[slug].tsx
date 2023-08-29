@@ -8,9 +8,9 @@ import { IPost } from "@/lib/caseStudyType";
 import ServiceIntroduction from "@/components/ServiceIntroduction";
 import IntervieweeInfo from "@/components/IntervieweeInfo";
 import ImageSlider from "@/components/ImageSlider";
-import { usePost } from "@/hooks/use-post";
 import { getPost } from "@/utils/getPost";
 import { InferGetStaticPropsType } from "next/types";
+import { usePost } from "@/hooks/use-case_study-post";
 
 export async function getStaticPaths() {
   const allPosts = await getCaseStudyPosts();
