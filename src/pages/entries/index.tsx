@@ -1,6 +1,6 @@
 import { GetStaticProps } from "next";
 import { IPost } from "@/lib/entryType";
-import { getEntryPosts } from "@/lib/entry";
+import { getEntryPosts } from "@/lib/getEntryPosts";
 import Link from "next/link";
 import styled from "@emotion/styled";
 import Image from "next/image";
