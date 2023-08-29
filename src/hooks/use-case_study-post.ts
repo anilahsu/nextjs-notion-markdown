@@ -5,7 +5,7 @@ import { fetcher } from "@/utils/fetcher";
 export interface UsePostProps extends SWRConfiguration, Partial<PostQuery> {}
 
 export const usePost = ({ id, ...config }: UsePostProps) => {
-  const swr = useSWR<PostRes>(!id ? null : "/api/post/" + id, fetcher, config);
+  const swr = useSWR<PostRes>(!id ? null : "/api/case_study_post/" + id, fetcher, config);
 
   const isLoading = !swr.error && !swr.data;
 
