@@ -1,4 +1,4 @@
-import { getEntryPosts } from "@/lib/entry";
+import { getEntryPosts } from "@/lib/getEntryPosts";
 import { MdStringObject } from "notion-to-md/build/types";
 import { NotionToMarkdown } from "notion-to-md";
 import { notion } from "@/lib/notion";
@@ -15,21 +15,21 @@ export async function getStaticPaths() {
   const allPaths = allPosts.map((post) => {
     return post.path;
   });
-  // if (isDev) {
+  if (isDev) {
     return {
       paths: [],
       fallback: "blocking",
     };
-  // }
-  // const staticPaths = {
-  //   paths: allPaths.map((slug) => ({
-  //     params: {
-  //       slug,
-  //     },
-  //   })),
-  //   fallback: "blocking",
-  // };
-  // return staticPaths;
+  }
+  const staticPaths = {
+    paths: allPaths.map((slug) => ({
+      params: {
+        slug,
+      },
+    })),
+    fallback: "blocking",
+  };
+  return staticPaths;
 }
 const n2m = new NotionToMarkdown({ notionClient: notion });
 
@@ -47,6 +47,8 @@ export const getStaticProps = async ({ params: { slug } }: Params) => {
 
   const property = currentPost[0];
   const id = property.id;
+  // const { imageSizes, blocks } = await getPost(id);
+
   const mdBlocks = await n2m.pageToMarkdown(id);
   const mdString = n2m.toMarkdownString(mdBlocks);
   const markdown = mdString.parent ? mdString.parent : "";
@@ -107,4 +109,3 @@ const NotionDomainDynamicPage = ({ property, markdown, imageSizes }: Props) => {
 };
 
 export default NotionDomainDynamicPage;
-
