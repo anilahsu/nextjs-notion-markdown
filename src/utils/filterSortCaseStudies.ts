@@ -1,6 +1,6 @@
 import { IPost } from "@/lib/caseStudyType";
 
-export const FilterOrderData = (posts: IPost[]) => {
+export const FilterOrderCaseStudies = (posts: IPost[]) => {
   const publishedPosts = posts.filter((post) => post.published);
 
   publishedPosts.sort((a, b) => {

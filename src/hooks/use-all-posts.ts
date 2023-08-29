@@ -1,5 +1,5 @@
 import useSWR, { SWRConfiguration } from "swr";
-import { PostsQuery, PostsRes } from "@/pages/api/posts";
+import { PostsQuery, PostsRes } from "@/pages/api/case_ study_posts";
 import { fetcher } from "@/utils/fetcher";
 
 export interface UseAllPostsProps

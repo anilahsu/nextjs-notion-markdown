@@ -1,19 +1,19 @@
 import { GetStaticProps } from "next";
 import { IPost } from "@/lib/caseStudyType";
-import { getCaseStudyPosts } from "@/lib/caseStudy";
+import { getCaseStudyPosts } from "@/lib/getCaseStudyPosts";
 import Link from "next/link";
 import styled from "@emotion/styled";
 import Image from "next/image";
 import { useAllPosts } from "@/hooks/use-all-posts";
-import { FilterOrderData } from "@/utils/filterOrderPosts";
+import { FilterOrderCaseStudies } from "@/utils/filterSortCaseStudies";
 
 export const getStaticProps: GetStaticProps = async () => {
   const posts = await getCaseStudyPosts();
-  const publishedPosts = FilterOrderData(posts);
+  const publishedPosts = FilterOrderCaseStudies(posts);
 
   return {
     props: {
-      fallbackData: publishedPosts ,
+      fallbackData: publishedPosts,
     },
     revalidate: 1,
   };
@@ -23,13 +23,14 @@ interface Props {
   fallbackData: IPost[];
 }
 
-const CaseStudyList = ({fallbackData}: Props) => {
+const CaseStudyList = ({ fallbackData }: Props) => {
   const { data, isLoading } = useAllPosts({
     fallbackData,
     revalidateOnMount: false,
   });
 
-  const posts = !isLoading && data?.publishedPosts ? data.publishedPosts: fallbackData;
+  const posts =
+    !isLoading && data?.publishedPosts ? data.publishedPosts : fallbackData;
 
   return (
     <Container>

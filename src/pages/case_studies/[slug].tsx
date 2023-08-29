@@ -1,4 +1,4 @@
-import { getCaseStudyPosts } from "@/lib/caseStudy";
+import { getCaseStudyPosts } from "@/lib/getCaseStudyPosts";
 import ReactMarkdown from "react-markdown";
 import Image from "next/image";
 import styles from "@/styles/post.module.css";
@@ -9,7 +9,7 @@ import ServiceIntroduction from "@/components/ServiceIntroduction";
 import IntervieweeInfo from "@/components/IntervieweeInfo";
 import ImageSlider from "@/components/ImageSlider";
 import { usePost } from "@/hooks/use-post";
-import { getPost } from "@/lib/getPost";
+import { getPost } from "@/utils/getPost";
 import { InferGetStaticPropsType } from "next/types";
 
 export async function getStaticPaths() {
@@ -96,7 +96,7 @@ const StaticComponent = ({
 const NotionDomainDynamicPage = ({
   id,
   property,
-  fallbackData
+  fallbackData,
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const { data, isLoading } = usePost({
     id,

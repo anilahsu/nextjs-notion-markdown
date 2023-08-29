@@ -1,5 +1,5 @@
 import useSWR, { SWRConfiguration } from "swr";
-import { PostQuery, PostRes } from "@/pages/api/post/[id]";
+import { PostQuery, PostRes } from "@/pages/api/case_study_post/[id]";
 import { fetcher } from "@/utils/fetcher";
 
 export interface UsePostProps extends SWRConfiguration, Partial<PostQuery> {}

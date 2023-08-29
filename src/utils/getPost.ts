@@ -2,7 +2,7 @@ import { getImageDimensions } from "@/utils/getImageDimensions";
 import { addZeroWidthSpace } from "@/utils/addZeroWidthSpace";
 import { parseMarkdown } from "@/utils/parseMarkdown";
 import { NotionToMarkdown } from "notion-to-md";
-import { notion } from "./notion";
+import { notion } from "../lib/notion";
 
 const n2m = new NotionToMarkdown({ notionClient: notion });
 
@@ -20,6 +20,6 @@ export const getPost = async (id: string) => {
   });
   return {
     imageSizes,
-    blocks
-  }
+    blocks,
+  };
 };

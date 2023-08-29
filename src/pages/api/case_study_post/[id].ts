@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { getPost } from "@/lib/getPost";
+import { getPost } from "@/utils/getPost";
 
 type Post = {
   imageSizes: Record<string, { width: number; height: number }>;

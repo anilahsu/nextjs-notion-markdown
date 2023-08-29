@@ -1,7 +1,7 @@
-import { getCaseStudyPosts } from "@/lib/caseStudy";
+import { getCaseStudyPosts } from "@/lib/getCaseStudyPosts";
 import { IPost } from "@/lib/caseStudyType";
-import { FilterOrderData } from "@/utils/filterOrderPosts";
 import { NextApiRequest, NextApiResponse } from "next";
+import { FilterOrderCaseStudies } from "@/utils/filterSortCaseStudies";
 
 export interface PostsQuery {}
 export interface PostsRes {
@@ -14,7 +14,7 @@ const handle = async (_: NextApiRequest, res: NextApiResponse<PostsRes>) => {
 
   try {
     const posts = await getCaseStudyPosts();
-    const publishedPosts = FilterOrderData(posts);
+    const publishedPosts = FilterOrderCaseStudies(posts);
 
     res.status(200).json({ publishedPosts });
   } catch (error) {
