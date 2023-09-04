@@ -15,12 +15,13 @@ export async function getStaticPaths() {
   const allPaths = allPosts.map((post) => {
     return post.path;
   });
-  if (isDev) {
+  console.log(allPaths)
+  // if (isDev) {
     return {
       paths: [],
       fallback: "blocking",
     };
-  }
+  // }
   const staticPaths = {
     paths: allPaths.map((slug) => ({
       params: {
