@@ -31,50 +31,51 @@ const CaseStudyList = ({ fallbackData }: Props) => {
 
   const posts: IPost[] =
     !isLoading && data?.publishedPosts ? data?.publishedPosts : fallbackData;
+    
   return (
     <Container>
       <h1>Case Study Post</h1>
-      { posts.map((post) => {
-          return (
-            <Link key={post.path} href={"/case_studies/" + post.path}>
-              <Card>
-                {post.cover && (
-                  <CoverImage
-                    src={post.cover}
-                    alt={""}
-                    width={700}
-                    height={300}
-                  />
-                )}
-                <Title>{post.title}</Title>
-                <p>{post.companyName}</p>
-                <p>{post.moneyName}</p>
-                <p>{post.industryCategory}</p>
-                {/* <p>{post.refLink}</p>
+      {posts.map((post) => {
+        return (
+          <Link key={post.path} href={"/case_studies/" + post.path}>
+            <Card>
+              {post.cover && (
+                <CoverImage
+                  src={post.cover}
+                  alt={""}
+                  width={700}
+                  height={300}
+                />
+              )}
+              <Title>{post.title}</Title>
+              <p>{post.companyName}</p>
+              <p>{post.moneyName}</p>
+              <p>{post.industryCategory}</p>
+              {/* <p>{post.refLink}</p>
               <p>{post.modifiedDate}</p>
 
               <p>{post.url}</p>
               <p>{post.path}</p>
               <p>{post.id}</p> */}
 
-                <span>
-                  {post.industry.map((tag, index) => (
-                    <Tag key={index}>{tag}</Tag>
-                  ))}
-                  {post.area.map((tag, index) => (
-                    <Tag key={index}>{tag}</Tag>
-                  ))}
-                  {post.topic.map((tag, index) => (
-                    <Tag key={index}>{tag}</Tag>
-                  ))}
-                  {post.scale.map((tag, index) => (
-                    <Tag key={index}>{tag}</Tag>
-                  ))}
-                </span>
-              </Card>
-            </Link>
-          );
-        })}
+              <span>
+                {post.industry.map((tag, index) => (
+                  <Tag key={index}>{tag}</Tag>
+                ))}
+                {post.area.map((tag, index) => (
+                  <Tag key={index}>{tag}</Tag>
+                ))}
+                {post.topic.map((tag, index) => (
+                  <Tag key={index}>{tag}</Tag>
+                ))}
+                {post.scale.map((tag, index) => (
+                  <Tag key={index}>{tag}</Tag>
+                ))}
+              </span>
+            </Card>
+          </Link>
+        );
+      })}
     </Container>
   );
 };
