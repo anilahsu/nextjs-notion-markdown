@@ -67,7 +67,7 @@ export const extractPosts = async (
         postInDB.properties.Path.rich_text instanceof Array &&
         postInDB.properties.Path.rich_text[0]
           ? postInDB.properties.Path.rich_text[0].plain_text
-          : "";
+          : null;
       const cover = postInDB.cover && getCover(postInDB.cover);
       const url = postInDB.url;
       const available =
