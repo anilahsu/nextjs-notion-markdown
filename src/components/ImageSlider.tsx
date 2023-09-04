@@ -3,7 +3,6 @@ import styled from "@emotion/styled";
 import Carousel from "@/components/Carousel";
 
 const ImageSlider = ({ context }: { context: IPost }) => {
-  console.log(context.imageSlider)
   const images =
     context.imageSlider &&
     context.imageSlider.map((image) => {
@@ -15,7 +14,6 @@ const ImageSlider = ({ context }: { context: IPost }) => {
         return null;
       }
     });
-  console.log(images);
   return (
     <>
       {images && images.length > 0 && (
