@@ -18,12 +18,12 @@ export async function getStaticPaths() {
     return post.path;
   });
 
-  if (isDev) {
-    return {
-      paths: [],
-      fallback: "blocking",
-    };
-  }
+  // if (isDev) {
+  return {
+    paths: [],
+    fallback: "blocking",
+  };
+  // }
   const staticPaths = {
     paths: allPaths.map((slug) => ({
       params: {
@@ -104,13 +104,14 @@ const NotionDomainDynamicPage = ({
     revalidateOnMount: false,
   });
 
-  const post = !isLoading && data?.post;
+  const post = !isLoading && data?.post ? data?.post : fallbackData;
 
   return (
     <div className={styles.container}>
       <h1>{property && property.title}</h1>
       <p>{property && property.companyName}</p>
-      {post && post.blocks &&
+      {post &&
+        post.blocks &&
         post.blocks.map((block, index) => {
           switch (block.kind) {
             case "markdown":
