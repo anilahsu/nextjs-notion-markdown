@@ -7,8 +7,9 @@ import Image from "next/image";
 import styles from "@/styles/post.module.css";
 import { isDev } from "@/lib/config";
 import { IPost } from "@/lib/entryType";
-import { getImageDimensions } from "@/utils/getImageDimensions";
-import { addZeroWidthSpace } from "@/utils/addZeroWidthSpace";
+import { getPost } from "@/utils/getPost";
+import { InferGetStaticPropsType } from "next";
+import { useEntryPost } from "@/hooks/useEntryPost";
 
 export async function getStaticPaths() {
   const allPosts = await getEntryPosts();
@@ -16,12 +17,12 @@ export async function getStaticPaths() {
     return post.path;
   });
   console.log(allPaths)
-  // if (isDev) {
+  if (isDev) {
     return {
       paths: [],
       fallback: "blocking",
     };
-  // }
+  }
   const staticPaths = {
     paths: allPaths.map((slug) => ({
       params: {
@@ -32,7 +33,6 @@ export async function getStaticPaths() {
   };
   return staticPaths;
 }
-const n2m = new NotionToMarkdown({ notionClient: notion });
 
 type Params = {
   params: {
@@ -48,20 +48,16 @@ export const getStaticProps = async ({ params: { slug } }: Params) => {
 
   const property = currentPost[0];
   const id = property.id;
-  // const { imageSizes, blocks } = await getPost(id);
+  const { imageSizes, blocks } = await getPost(id);
 
-  const mdBlocks = await n2m.pageToMarkdown(id);
-  const mdString = n2m.toMarkdownString(mdBlocks);
-  const markdown = mdString.parent ? mdString.parent : "";
-
-  const newMarkdown = addZeroWidthSpace(markdown);
-  const imageSizes = await getImageDimensions(markdown);
   return {
     props: {
-      mdString,
+      id,
       property,
-      markdown: newMarkdown,
-      imageSizes,
+      fallbackData: {
+        blocks,
+        imageSizes,
+      },
     },
     revalidate: 1,
   };
@@ -74,37 +70,62 @@ type Props = {
   imageSizes: Record<string, { width: number; height: number }>;
 };
 
-const NotionDomainDynamicPage = ({ property, markdown, imageSizes }: Props) => {
+const NotionDomainDynamicPage = ({ id, property, fallbackData }: InferGetStaticPropsType<typeof getStaticProps>) => {
+  const { data, isLoading } = useEntryPost({
+    id,
+    fallbackData,
+    revalidateOnMount: false,
+  });
+
+  const post = !isLoading && data?.post ? data?.post : fallbackData;
+
+  
   return (
     <div className={styles.container}>
       <h1>{property && property.title}</h1>
       <p>{property && property.categories}</p>
-      <ReactMarkdown
-        remarkPlugins={[]}
-        className={styles.reactMarkDown}
-        components={{
-          img: (props) => {
-            if (props.src && imageSizes[props.src]) {
-              if (!props.src.startsWith("data:")) {
-                const { src, alt } = props;
-                const { width, height } = imageSizes[props.src];
-                return (
-                  <Image
-                    src={src}
-                    alt={alt || ""}
-                    width={width}
-                    height={height}
-                  />
-                );
-              }
-            } else {
-              return <img {...props} />;
-            }
-          },
-        }}
-      >
-        {markdown}
-      </ReactMarkdown>
+      {post &&
+        post.blocks &&
+        post.blocks.map((block, index) => {
+          switch (block.kind) {
+            case "markdown":
+              return (
+                <ReactMarkdown
+                  key={index}
+                  remarkPlugins={[]}
+                  className={styles.reactMarkDown}
+                  components={{
+                    img: (props) => {
+                      if (props.src && post.imageSizes[props.src]) {
+                        if (!props.src.startsWith("data:")) {
+                          const { src, alt } = props;
+                          const { width, height } = post.imageSizes[props.src];
+                          return (
+                            <Image
+                              src={src}
+                              alt={alt || ""}
+                              width={width}
+                              height={height}
+                            />
+                          );
+                        }
+                      } else {
+                        return <img {...props} />;
+                      }
+                    },
+                  }}
+                >
+                  {block.data}
+                </ReactMarkdown>
+              );
+            case "static":
+              return (
+               <></>
+              );
+            default:
+              return null;
+          }
+        })}
     </div>
   );
 };

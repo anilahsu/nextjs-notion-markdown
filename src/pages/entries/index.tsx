@@ -4,29 +4,32 @@ import { getEntryPosts } from "@/lib/getEntryPosts";
 import Link from "next/link";
 import styled from "@emotion/styled";
 import Image from "next/image";
+import { filterOrderEntries } from "@/utils/filterSortEntries";
+import { useAllEntryPosts } from "@/hooks/useAllEntryPosts";
 
 export const getStaticProps: GetStaticProps = async () => {
   const posts = await getEntryPosts();
-  const publishedPosts = posts.filter((post) => post.published);
-  publishedPosts
-    .sort(
-      (a, b) =>
-        new Date(a.modifiedDate).getTime() - new Date(b.modifiedDate).getTime()
-    )
-    .reverse();
+  const publishedPosts = filterOrderEntries(posts);
   return {
     props: {
-      posts: publishedPosts,
+      fallbackData: publishedPosts,
     },
     revalidate: 1,
   };
 };
 
 interface Props {
-  posts: IPost[];
+  fallbackData: IPost[];
 }
 
-const EntryList = ({ posts }: Props) => {
+const EntryList = ({ fallbackData }: Props) => {
+  const { data, isLoading } = useAllEntryPosts({
+    fallbackData,
+    revalidateOnMount: false,
+  });
+
+  const posts: IPost[] =
+    !isLoading && data?.publishedPosts ? data?.publishedPosts : fallbackData;
   return (
     <Container>
       <h1>Entry Post</h1>
@@ -107,3 +110,5 @@ const Category = styled.span`
   border-radius: 10px;
   margin: 0 5px;
 `;
+
+
