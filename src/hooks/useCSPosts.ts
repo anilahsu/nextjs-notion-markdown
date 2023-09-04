@@ -6,7 +6,7 @@ export interface UseAllPostsProps
   extends SWRConfiguration,
     Partial<PostsQuery> {}
 
-export const useAllPosts = (config?: UseAllPostsProps) => {
+export const useAllCSPosts = (config?: UseAllPostsProps) => {
   const swr = useSWR<PostsRes>("/api/case_study_posts/", fetcher, config);
 
   const isLoading = !swr.error && !swr.data;

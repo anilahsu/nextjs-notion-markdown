@@ -10,7 +10,7 @@ import IntervieweeInfo from "@/components/IntervieweeInfo";
 import ImageSlider from "@/components/ImageSlider";
 import { getPost } from "@/utils/getPost";
 import { InferGetStaticPropsType } from "next/types";
-import { usePost } from "@/hooks/use-case_study-post";
+import { useCSPost } from "@/hooks/useCSPost";
 
 export async function getStaticPaths() {
   const allPosts = await getCaseStudyPosts();
@@ -18,12 +18,12 @@ export async function getStaticPaths() {
     return post.path;
   });
 
-  // if (isDev) {
+  if (isDev) {
   return {
     paths: [],
     fallback: "blocking",
   };
-  // }
+  }
   const staticPaths = {
     paths: allPaths.map((slug) => ({
       params: {
@@ -98,7 +98,7 @@ const NotionDomainDynamicPage = ({
   property,
   fallbackData,
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
-  const { data, isLoading } = usePost({
+  const { data, isLoading } = useCSPost({
     id,
     fallbackData,
     revalidateOnMount: false,

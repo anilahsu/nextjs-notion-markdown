@@ -4,7 +4,7 @@ import { getCaseStudyPosts } from "@/lib/getCaseStudyPosts";
 import Link from "next/link";
 import styled from "@emotion/styled";
 import Image from "next/image";
-import { useAllPosts } from "@/hooks/use-case_study-posts";
+import { useAllCSPosts } from "@/hooks/useCSPosts";
 import { FilterOrderCaseStudies } from "@/utils/filterSortCaseStudies";
 
 export const getStaticProps: GetStaticProps = async () => {
@@ -24,12 +24,12 @@ interface Props {
 }
 
 const CaseStudyList = ({ fallbackData }: Props) => {
-  const { data, isLoading } = useAllPosts({
+  const { data, isLoading } = useAllCSPosts({
     fallbackData,
     revalidateOnMount: false,
   });
 
-  const posts =
+  const posts: IPost[] =
     !isLoading && data?.publishedPosts ? data?.publishedPosts : fallbackData;
   return (
     <Container>
