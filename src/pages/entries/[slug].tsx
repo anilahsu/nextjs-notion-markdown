@@ -1,7 +1,5 @@
 import { getEntryPosts } from "@/lib/getEntryPosts";
 import { MdStringObject } from "notion-to-md/build/types";
-import { NotionToMarkdown } from "notion-to-md";
-import { notion } from "@/lib/notion";
 import ReactMarkdown from "react-markdown";
 import Image from "next/image";
 import styles from "@/styles/post.module.css";
@@ -13,10 +11,10 @@ import { useEntryPost } from "@/hooks/useEntryPost";
 
 export async function getStaticPaths() {
   const allPosts = await getEntryPosts();
-  const allPaths = allPosts.map((post) => {
+  const published = allPosts.filter((post)=> post.published)
+  const allPaths = published.map((post) => {
     return post.path;
   });
-  console.log(allPaths)
   if (isDev) {
     return {
       paths: [],
