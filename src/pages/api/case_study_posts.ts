@@ -15,6 +15,7 @@ const handle = async (_: NextApiRequest, res: NextApiResponse<PostsRes>) => {
   try {
     const posts = await getCaseStudyPosts();
     const publishedPosts = FilterOrderCaseStudies(posts);
+    console.log(publishedPosts)
 
     res.status(200).json({ publishedPosts });
   } catch (error) {
