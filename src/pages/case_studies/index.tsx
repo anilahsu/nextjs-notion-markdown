@@ -10,7 +10,6 @@ import { FilterOrderCaseStudies } from "@/utils/filterSortCaseStudies";
 export const getStaticProps: GetStaticProps = async () => {
   const posts = await getCaseStudyPosts();
   const publishedPosts = FilterOrderCaseStudies(posts);
-
   return {
     props: {
       fallbackData: publishedPosts,
@@ -30,12 +29,12 @@ const CaseStudyList = ({ fallbackData }: Props) => {
   });
 
   const posts =
-    !isLoading && data?.publishedPosts ? data.publishedPosts : fallbackData;
+    !isLoading && data?.publishedPosts;
 
   return (
     <Container>
       <h1>Case Study Post</h1>
-      {posts.map((post) => {
+      {posts && posts.map((post) => {
         return (
           <Link key={post.path} href={"/case_studies/" + post.path}>
             <Card>

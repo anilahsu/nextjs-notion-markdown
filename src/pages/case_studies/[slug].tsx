@@ -104,13 +104,13 @@ const NotionDomainDynamicPage = ({
     revalidateOnMount: false,
   });
 
-  const post = !isLoading && data?.post ? data.post : fallbackData;
+  const post = !isLoading && data?.post;
 
   return (
     <div className={styles.container}>
       <h1>{property && property.title}</h1>
       <p>{property && property.companyName}</p>
-      {post.blocks &&
+      {post && post.blocks &&
         post.blocks.map((block, index) => {
           switch (block.kind) {
             case "markdown":
