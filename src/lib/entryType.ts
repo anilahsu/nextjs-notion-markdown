@@ -33,7 +33,7 @@ export interface IPost {
   categories: string[];
   createdTime: string;
   modifiedDate: string;
-  path: string | null;
+  path: string;
   cover: string | null;
   url: string;
   published: boolean;
